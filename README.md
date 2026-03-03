@@ -34,7 +34,7 @@ SpendSee is a high-performance, visually-driven personal finance dashboard desig
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Faremu/SpendSee
    cd mymoney
    ```
 
@@ -47,13 +47,6 @@ SpendSee is a high-performance, visually-driven personal finance dashboard desig
    ```bash
    npm run dev
    ```
-
-### Environment Variables
-
-Create a `.env` file in the root directory:
-```env
-VITE_GEMINI_API_KEY=your_api_key_here
-```
 
 ## 📱 Mobile Deployment (Android)
 
