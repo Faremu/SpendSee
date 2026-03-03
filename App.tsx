@@ -381,7 +381,7 @@ const App: React.FC = () => {
         </div>
 
         {/* Row 1-2, Col 5-12 */}
-        <div className="md:col-span-8 md:row-span-2 bento-card p-6 md:p-10 flex flex-col min-h-[400px] md:min-h-0">
+        <div className="md:col-span-8 md:row-span-2 bento-card p-6 md:p-10 flex flex-col min-h-[500px] md:min-h-0">
           <div className="flex justify-between items-start mb-6">
             <div>
               <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Footprint</h3>
@@ -392,7 +392,7 @@ const App: React.FC = () => {
               <div className="text-[9px] uppercase tracking-[0.2em] text-slate-300 font-black">Burn rate</div>
             </div>
           </div>
-          <div className="flex-1 w-full relative">
+          <div className="flex-1 w-full relative mt-2">
              <MeasureWrapper>
                {(w, h) => (
                  <TreeMap 
@@ -830,7 +830,7 @@ const MeasureWrapper: React.FC<{ children: (width: number, height: number) => Re
     return () => observer.disconnect();
   }, []);
 
-  return <div ref={ref} className="w-full h-full relative overflow-hidden">{children(size.width, size.height)}</div>;
+  return <div ref={ref} className="w-full h-full relative overflow-hidden p-2">{children(Math.max(0, size.width - 16), Math.max(0, size.height - 16))}</div>;
 };
 
 export default App;

@@ -73,7 +73,8 @@ const TreeMap: React.FC<TreeMapProps> = ({ transactions, width, height, onNodeCl
 
     d3.treemap<any>()
       .size([width, height])
-      .padding(6)
+      .paddingInner(4)
+      .paddingOuter(2) // Add outer padding to prevent stroke clipping
       .round(true)
       (root);
 
@@ -176,93 +177,67 @@ const TreeMap: React.FC<TreeMapProps> = ({ transactions, width, height, onNodeCl
       const boxH = d.y1 - d.y0;
       const percentage = totalValue > 0 ? ((d.data.value / totalValue) * 100).toFixed(1) : "0";
 
-      // Lowered thresholds to show details more often
-      const showDetails = boxW > 70 && boxH > 80;
-      const showIconOnly = boxW > 30 && boxH > 30;
+      // Show details if there's enough room
+      const showDetails = boxW > 50 && boxH > 50;
+      const showIconOnly = !showDetails && boxW > 20 && boxH > 20;
 
       if (showDetails) {
-        const padding = 12;
-        if (isUrl) {
-          node.append("foreignObject")
-            .attr("x", padding)
-            .attr("y", padding)
-            .attr("width", 32)
-            .attr("height", 32)
-            .append("xhtml:div")
-            .style("width", "32px")
-            .style("height", "32px")
-            .style("border-radius", "8px")
-            .style("overflow", "hidden")
-            .style("background", "white")
-            .html(`<img src="${iconUrl}" style="width:100%;height:100%;object-fit:cover;" referrerpolicy="no-referrer" />`);
-        } else {
-          node.append("text")
-            .attr("x", padding)
-            .attr("y", padding + 24)
-            .attr("font-size", "24px")
-            .text(d.data.icon);
-        }
-
+        // Adaptive padding based on box height
+        const padding = boxH < 80 ? 6 : 10;
         const isDark = d3.hsl(d.data.color).l < 0.5;
         const textColor = isDark ? "#ffffff" : "#0f172a";
-        const label = node.append("text")
-          .attr("fill", textColor)
+        
+        // Hide icon if height is very tight
+        const showIcon = boxH > 90;
+        const showPercentage = boxH > 70;
+
+        node.append("foreignObject")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", boxW)
+          .attr("height", boxH)
+          .append("xhtml:div")
+          .style("width", "100%")
+          .style("height", "100%")
+          .style("padding", `${padding}px`)
+          .style("display", "flex")
+          .style("flex-direction", "column")
+          .style("justify-content", "flex-start") // Align to top-left as requested
+          .style("align-items", "flex-start")
+          .style("color", textColor)
           .style("font-family", "Inter, sans-serif")
-          .style("pointer-events", "none");
-
-        // Dynamic truncation for category name
-        const maxChars = Math.floor((boxW - (padding * 2)) / 7);
-        const displayName = d.data.name.length > maxChars 
-          ? d.data.name.slice(0, Math.max(0, maxChars - 3)) + '...' 
-          : d.data.name;
-
-        label.append("tspan")
-          .attr("x", padding)
-          .attr("y", 62)
-          .attr("font-size", "10px")
-          .attr("font-weight", "800")
-          .attr("text-transform", "uppercase")
-          .attr("letter-spacing", "0.05em")
-          .style("opacity", isDark ? 0.7 : 0.5)
-          .text(displayName);
-
-        label.append("tspan")
-          .attr("x", padding)
-          .attr("y", 80)
-          .attr("font-size", "14px")
-          .attr("font-weight", "900")
-          .text(`฿${d.data.value.toLocaleString()}`);
-
-        label.append("tspan")
-          .attr("x", padding)
-          .attr("y", 94)
-          .attr("font-size", "9px")
-          .attr("font-weight", "800")
-          .attr("fill", isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(15, 23, 42, 0.4)")
-          .text(`${percentage}%`);
+          .style("pointer-events", "none")
+          .style("overflow", "hidden")
+          .html(`
+            <div style="display: flex; flex-direction: column; gap: 2px; width: 100%; max-height: 100%; overflow: hidden;">
+              ${showIcon ? `
+              <div style="width: 28px; height: 28px; border-radius: 6px; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 2px;">
+                ${isUrl ? `<img src="${iconUrl}" style="width:100%;height:100%;object-fit:cover;" referrerpolicy="no-referrer" />` : `<span style="font-size: 18px;">${d.data.icon}</span>`}
+              </div>` : ''}
+              <div style="width: 100%;">
+                <div style="font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; opacity: ${isDark ? 0.8 : 0.6}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2;">${d.data.name}</div>
+                <div style="font-size: 13px; font-weight: 900; line-height: 1.1; margin-top: 1px;">฿${d.data.value.toLocaleString()}</div>
+                ${showPercentage ? `<div style="font-size: 8px; font-weight: 800; opacity: 0.5; line-height: 1;">${percentage}%</div>` : ''}
+              </div>
+            </div>
+          `);
       } else if (showIconOnly) {
-        // Just show icon or emoji centered if small
-        if (isUrl) {
-           node.append("foreignObject")
-            .attr("x", (boxW - 24) / 2)
-            .attr("y", (boxH - 24) / 2)
-            .attr("width", 24)
-            .attr("height", 24)
-            .append("xhtml:div")
-            .style("width", "24px")
-            .style("height", "24px")
-            .style("border-radius", "6px")
-            .style("overflow", "hidden")
-            .style("background", "white")
-            .html(`<img src="${iconUrl}" style="width:100%;height:100%;object-fit:cover;" referrerpolicy="no-referrer" />`);
-        } else {
-          node.append("text")
-            .attr("x", boxW / 2)
-            .attr("y", boxH / 2 + 8)
-            .attr("font-size", "20px")
-            .attr("text-anchor", "middle")
-            .text(d.data.icon);
-        }
+        node.append("foreignObject")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", boxW)
+          .attr("height", boxH)
+          .append("xhtml:div")
+          .style("width", "100%")
+          .style("height", "100%")
+          .style("display", "flex")
+          .style("align-items", "center")
+          .style("justify-content", "center")
+          .html(`
+            <div style="width: 20px; height: 20px; border-radius: 4px; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+              ${isUrl ? `<img src="${iconUrl}" style="width:100%;height:100%;object-fit:cover;" referrerpolicy="no-referrer" />` : `<span style="font-size: 14px;">${d.data.icon}</span>`}
+            </div>
+          `);
       }
     });
 
@@ -278,7 +253,7 @@ const TreeMap: React.FC<TreeMapProps> = ({ transactions, width, height, onNodeCl
   }
 
   return (
-    <svg ref={svgRef} width={width} height={height} className="overflow-visible" />
+    <svg ref={svgRef} width={width} height={height} className="overflow-hidden" />
   );
 };
 

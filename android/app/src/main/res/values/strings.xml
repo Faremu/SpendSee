@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SpendSee</string>
+    <string name="title_activity_main">SpendSee</string>
+    <string name="package_name">com.mymoney.app</string>
+    <string name="custom_url_scheme">com.mymoney.app</string>
+</resources>
