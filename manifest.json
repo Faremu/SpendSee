@@ -1,0 +1,22 @@
+{
+  "name": "SpendSee",
+  "short_name": "SpendSee",
+  "description": "Intelligent wealth orchestration for mobile.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "https://picsum.photos/seed/finance/192/192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://picsum.photos/seed/finance/512/512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

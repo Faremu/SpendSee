@@ -1,0 +1,5 @@
+{
+  "name": "SpendSee",
+  "description": "A sophisticated cross-platform personal finance manager inspired by Monefy logic and Subgrid aesthetics, featuring intelligent DCA rules and treemap visualizations.",
+  "requestFramePermissions": []
+}

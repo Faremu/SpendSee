@@ -1,0 +1,34 @@
+{
+  "name": "knowyourhealth",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "lint": "tsc --noEmit",
+    "build": "vite build",
+    "preview": "vite preview",
+    "mobile:init": "npx cap init SpendSee com.mymoney.app --web-dir dist",
+    "mobile:add-android": "npx cap add android",
+    "mobile:sync": "npx cap sync",
+    "mobile:open-android": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.1.0",
+    "@capacitor/cli": "^8.1.0",
+    "@capacitor/core": "^8.1.0",
+    "@capacitor/screen-orientation": "^8.0.1",
+    "@google/genai": "^1.38.0",
+    "@tailwindcss/vite": "^4.2.1",
+    "d3": "^7.9.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}
