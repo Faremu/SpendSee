@@ -4,7 +4,7 @@
 
 SpendSee is a high-performance, visually-driven personal finance dashboard designed for precision wealth management. It combines real-time categorical flow analysis with an automated "Auto-Pilot" rule engine to help you orchestrate your financial footprint.
 
-![SpendSee Dashboard](https://picsum.photos/seed/finance/1200/600)
+![SpendSee Dashboard](/assets/UI.png)
 
 ## ✨ Key Features
 
